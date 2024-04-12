@@ -6,7 +6,7 @@ This program will convert any KiCad colour scheme into another one with colour m
 
 # Installation and Usage
 
-1. First, download the `colorscheme-wizard.py` file from this repository.
+1. First, download the `colourscheme-wizard.py` file from this repository.
 
 2. For the KiCad colour scheme to be converted, you can use the `user.json` scheme from this repository or any other KiCad
    colour scheme file.
@@ -28,11 +28,11 @@ This program will convert any KiCad colour scheme into another one with colour m
    Python script:
 
    ```console
-   python colorscheme-wizard.py ./user.json ./gruvbox_palette.json gruvbox.json gruvbox
+   python colourscheme-wizard.py ./user.json ./gruvbox_palette.json gruvbox.json gruvbox
    ```
 
    The last two arguments are the output file path and the name to given the colour scheme. For more more information,
-   run `python colorscheme-wizard.py -h`.
+   run `python colourscheme-wizard.py -h`.
 
    You will want to store your colour scheme somewhere where KiCad can access it. On Linux, that's in
    `.config/kicad/<version>/colors`. If you're not sure where to find this folder, follow the next step and instead of
