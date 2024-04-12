@@ -2,6 +2,8 @@
 
 This program will convert any KiCad colour scheme into another one with colour matching a user defined palette.
 
+![](./docs/pcb-preview.png)
+
 # Installation and Usage
 
 1. First, download the `colorscheme-wizard.py` file from this repository.
