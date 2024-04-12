@@ -150,7 +150,7 @@ def main():
 
     # Set up parser
     parser = argparse.ArgumentParser(
-        prog="Kicad Colourscheme Converter",
+        prog="Kicad Colour Scheme Converter",
         description="Converts a KiCad colour scheme by translating its colours to match a user defined palette.",
         epilog="Author: Matteo Golin",
     )
