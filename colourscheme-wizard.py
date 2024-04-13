@@ -82,6 +82,20 @@ class Colour:
             alpha=float(vals[3]),
         )
 
+    @classmethod
+    def from_string(cls, string: str) -> Self:
+        """
+        Creates a colour from a string in either RGB, RGBA or hexadecimal format.
+        Formats:
+            - rgba(r, g, b, a)
+            - rgb(r, g, b)
+            - #rrggbb
+            - #aarrggbb
+        """
+        if "#" in string:
+            return cls.from_hex_string(string)
+        return cls.from_rgb_string(string)
+
     def to_hex_string(self) -> str:
         """Returns the string representation of this colour in the format '#aabbccdd' or '#aabbcc'."""
 
@@ -141,7 +155,7 @@ def translate_colourscheme(original: JSON, palette: Palette, skip_keys: list[str
         if type(value) is dict:
             translated[key] = translate_colourscheme(value, palette, skip_keys)
         elif type(value) is str:
-            translated[key] = str(Colour.from_rgb_string(value).most_similar(palette))
+            translated[key] = str(Colour.from_string(value).most_similar(palette))
 
     return translated
 
@@ -167,7 +181,7 @@ def main():
 
     # Load palette
     loaded_palette: list[str] = json.load(args.palette)
-    palette = [Colour.from_hex_string(c) for c in loaded_palette]
+    palette = [Colour.from_string(c) for c in loaded_palette]
 
     # Translate
     translated = translate_colourscheme(original, palette, ["meta"])
