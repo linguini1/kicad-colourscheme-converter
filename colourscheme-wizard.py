@@ -50,7 +50,7 @@ class Colour:
 
         # Has alpha information
         if len(hex_val) > 6:
-            alpha = int(hex_val[:2], 16)
+            alpha = int(hex_val[:2], 16) / 255
             hex_val = hex_val[2:]
         else:
             alpha = 1.0
