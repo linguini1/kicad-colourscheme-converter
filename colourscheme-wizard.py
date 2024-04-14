@@ -120,6 +120,7 @@ class Colour:
         """
         Returns the colour from the palette that this colour is most similar to.
         This method uses the Euclidean approximation.
+        Any alpha on the original colour will be applied as the alpha on the returned colour.
         """
 
         current_best: tuple[Colour, float] = (self, float("inf"))
@@ -130,7 +131,12 @@ class Colour:
             if distance < current_best[1]:
                 current_best = (colour, distance)
 
-        return current_best[0]
+        return self.__class__(
+            red=current_best[0].red,
+            blue=current_best[0].blue,
+            green=current_best[0].green,
+            alpha=self.alpha,
+        )
 
 
 Palette: TypeAlias = list[Colour]
