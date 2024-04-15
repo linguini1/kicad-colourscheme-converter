@@ -116,6 +116,15 @@ class Colour:
     def __str__(self) -> str:
         return self.to_rgb_string()
 
+    def inverted(self) -> Self:
+        """Returns the inverted version of this colour."""
+        return self.__class__(
+            red=int(abs(255 * (self.alpha - (self.red / 255)))),
+            green=int(abs(255 * (self.alpha - (self.green / 255)))),
+            blue=int(abs(255 * (self.alpha - (self.blue / 255)))),
+            alpha=self.alpha,
+        )
+
     def most_similar(self, palette: list[Self]) -> Self:
         """
         Returns the colour from the palette that this colour is most similar to.
@@ -142,7 +151,7 @@ class Colour:
 Palette: TypeAlias = list[Colour]
 
 
-def translate_colourscheme(original: JSON, palette: Palette, skip_keys: list[str]) -> JSON:
+def translate_colourscheme(original: JSON, palette: Palette, skip_keys: list[str], invert: bool = False) -> JSON:
     """
     Translates a colour scheme in its JSON representation to an identical colour scheme matching the provided
     palette. This supports JSON with nested objects.
@@ -159,9 +168,12 @@ def translate_colourscheme(original: JSON, palette: Palette, skip_keys: list[str
             continue
 
         if type(value) is dict:
-            translated[key] = translate_colourscheme(value, palette, skip_keys)
+            translated[key] = translate_colourscheme(value, palette, skip_keys, invert)
         elif type(value) is str:
-            translated[key] = str(Colour.from_string(value).most_similar(palette))
+            colour = Colour.from_string(value)
+            if invert:
+                colour = colour.inverted()
+            translated[key] = str(colour.most_similar(palette))
 
     return translated
 
@@ -179,6 +191,7 @@ def main():
     parser.add_argument("out", type=FileType(mode="w"), help="The filepath to save the translated colour scheme.")
     parser.add_argument("palette", type=FileType(), help="The filepath of the JSON palette file.")
     parser.add_argument("name", type=str, help="The name of the new colour scheme.")
+    parser.add_argument("-i", action="store_true", help="Invert the original colour before converting it.")
 
     args = parser.parse_args()
 
@@ -190,7 +203,7 @@ def main():
     palette = [Colour.from_string(c) for c in loaded_palette]
 
     # Translate
-    translated = translate_colourscheme(original, palette, ["meta"])
+    translated = translate_colourscheme(original, palette, ["meta"], invert=args.i)
     translated["meta"]["name"] = args.name
     json.dump(translated, args.out)
 
